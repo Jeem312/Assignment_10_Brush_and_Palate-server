@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
@@ -7,12 +8,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
 
-
-
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wibgfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://brushPalate:6CHosG6Sn0vw3EpP@cluster0.wibgfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -26,9 +25,16 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
+    const craftCollection = client.db("craftDB").collection('craft');      
 
+    app.post('/addCraft',async(req,res)=>{
+      const craftInfo = req.body;
+      console.log(craftInfo);
+      const result = await craftCollection.insertOne(craftCollection);
+      res.send(result);
+     })
 
 
 
