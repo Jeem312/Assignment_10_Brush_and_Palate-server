@@ -9,11 +9,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// const { MongoClient, ServerApiVersion } = require('mongodb');
-// const uri = "mongodb+srv://<username>:<password>@cluster0.wibgfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wibgfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-console.log(uri)
+
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -50,6 +49,36 @@ async function run() {
       }).toArray();
         res.send(result)
       })
+      app.patch('/updateIteam/:id', async(req,res)=>{
+        console.log(req.params.id);
+        const id = req.params.id;
+        const filter = {_id: new ObjectId(id)};
+        const options = {upsert: true};
+        const updatedInfo = req.body;
+        const data ={
+          $set:{
+            name : updatedInfo.name,
+            Photo_Url:updatedInfo.Photo_Url,
+            Email:updatedInfo. Email,
+            Item_name:updatedInfo.Item_name,
+            subcategory_Name:updatedInfo.subcategory_Name,
+            description:updatedInfo.description,
+            customization:updatedInfo.customization,
+            rating:updatedInfo.rating,
+            price:updatedInfo.price,
+            stockStatus:updatedInfo.stockStatus,
+           
+          }
+        }
+          const result = await craftCollection.updateOne(filter,data,options);
+           res.send(result);
+      })
+      app.delete('/mycart/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result =await craftCollection.deleteOne(query);
+        res.send(result);
+       })
     
      app.get('/craftDetails/:id',async(req,res)=>{
       const id = req.params.id;
