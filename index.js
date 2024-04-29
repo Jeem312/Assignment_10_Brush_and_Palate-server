@@ -32,10 +32,14 @@ async function run() {
     app.post('/addCraft',async(req,res)=>{
       const craftInfo = req.body;
       console.log(craftInfo);
-      const result = await craftCollection.insertOne(craftCollection);
+      const result = await craftCollection.insertOne(craftInfo);
       res.send(result);
      })
-
+     app.get('/addCraft',async(req,res)=>{
+      const cursor = craftCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+     })
 
 
     // Send a ping to confirm a successful connection
