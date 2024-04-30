@@ -36,8 +36,12 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
        })
-   
-   
+       app.get('/categories/:subcategory_name',async(req,res)=>{
+        
+        const result = await categoryCollection.find({subcategory_name:req.params.subcategory_name}).toArray();
+          res.send(result);
+        })
+       
     app.post('/CraftIteam',async(req,res)=>{
       const craftInfo = req.body;
       console.log(craftInfo);
@@ -51,8 +55,10 @@ async function run() {
       res.send(result);
      })
       
+    
+     
      app.get('/mycart/:email',async(req,res)=>{
-      console.log(req.params.email)
+      
       const result = await craftCollection.find({Email:req.params.email
       }).toArray();
         res.send(result)
