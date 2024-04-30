@@ -30,7 +30,7 @@ async function run() {
 
     const craftCollection = client.db("craftDB").collection('craft');      
 
-    app.post('/addCraft',async(req,res)=>{
+    app.post('/CraftIteam',async(req,res)=>{
       const craftInfo = req.body;
       console.log(craftInfo);
       const result = await craftCollection.insertOne(craftInfo);
@@ -49,11 +49,10 @@ async function run() {
       }).toArray();
         res.send(result)
       })
-      app.patch('/updateIteam/:id', async(req,res)=>{
-        console.log(req.params.id);
+      app.patch('/CraftIteam/:id', async(req,res)=>{
         const id = req.params.id;
         const filter = {_id: new ObjectId(id)};
-        const options = {upsert: true};
+       
         const updatedInfo = req.body;
         const data ={
           $set:{
@@ -70,7 +69,7 @@ async function run() {
            
           }
         }
-          const result = await craftCollection.updateOne(filter,data,options);
+          const result = await craftCollection.updateOne(filter,data);
            res.send(result);
       })
       app.delete('/mycart/:id',async(req,res)=>{
@@ -79,6 +78,12 @@ async function run() {
         const result =await craftCollection.deleteOne(query);
         res.send(result);
        })
+      app.get('/CraftIteam/:id',async(req,res)=>{
+        const id =req.params.id;
+        const query = {_id:new ObjectId(id)}
+        const result =await craftCollection.findOne(query)
+      res.send(result) }
+      )
     
      app.get('/craftDetails/:id',async(req,res)=>{
       const id = req.params.id;
